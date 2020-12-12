@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">CustomTextView</string>
+    <string name="get_text_from_edit_text">Get Text from Edit text</string>
+    <string name="total_amount_to_be_paid">Total Amount to be paid</string>
+</resources>
