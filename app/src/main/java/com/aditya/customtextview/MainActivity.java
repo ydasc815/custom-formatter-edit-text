@@ -17,6 +17,6 @@ public class MainActivity extends AppCompatActivity {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         binding.btnMaterial
                 .setOnClickListener(view -> Toast.makeText(getApplicationContext(),
-                        binding.etTotalInvoiceAmount.getText(0), Toast.LENGTH_LONG).show());
+                        binding.etTotalInvoiceAmount.getText(), Toast.LENGTH_LONG).show());
     }
 }

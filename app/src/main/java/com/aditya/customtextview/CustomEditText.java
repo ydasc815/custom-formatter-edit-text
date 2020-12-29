@@ -16,6 +16,9 @@ import com.google.android.material.textfield.TextInputEditText;
 import java.math.BigInteger;
 import java.text.DecimalFormat;
 
+/*
+* Created by Aditya on 12-12-2020
+* */
 public class CustomEditText extends TextInputEditText implements TextWatcher {
     private static final String TAG = "CustomEditText";
     private final EditText editText = findViewById(this.getId());
@@ -45,12 +48,14 @@ public class CustomEditText extends TextInputEditText implements TextWatcher {
     @Override
     public void afterTextChanged(Editable editable) {
         editText.removeTextChangedListener(this);
+        Log.d(TAG, "afterTextChanged: " + this.getHint().toString());
         try {
             String str = editable.toString();
-            if(str.contains(",")) str = str.replaceAll(",", "");
-            DecimalFormat formatter = new DecimalFormat("#,##,###");
-            String fS = formatter.format(new BigInteger(str));
-            editText.setText(fS);
+            if(this.getHint().toString().equals("Total Amount to be paid")) {
+                editText.setText(customFormatter(str));
+            } else {
+                editText.setText(str);
+            }
             editText.setSelection(editText.getText().length());
 
         } catch (NumberFormatException numberFormatException) {
@@ -65,11 +70,33 @@ public class CustomEditText extends TextInputEditText implements TextWatcher {
         return super.getText();
     }
 
-    public Editable getText(int code) {
-        Log.d(TAG, "Overloaded method getText() accessed with code " + code);
+    public Editable getAmount() {
+        Log.d(TAG, "Overloaded method getText() accessed with code ");
         String s = super.getText().toString();
         s = s.replaceAll(",", "");
         return new SpannableStringBuilder(s);
     }
 
+    public String customFormatter(String str) {
+        String integralPart = "", fractionalPart = "";
+        str = str.replaceAll(",", "");
+        if(str.contains(".")) {
+            fractionalPart = str.substring(str.indexOf('.'));
+            integralPart = str.substring(0, str.indexOf('.'));
+        } else integralPart = str;
+        Log.d(TAG, "customFormatter: " + integralPart.length());
+        if(integralPart.length() < 4) return str;
+        else {
+            StringBuffer sb = new StringBuffer(integralPart);
+            sb.insert(integralPart.length() - 3, ",");
+            int i = integralPart.length() - 3;
+            while (i >= 0) {
+                if (i - 3 >= 0) {
+                    i -= 2;
+                    sb.insert(i, ",");
+                } else break;
+            }
+            return sb.toString() + fractionalPart;
+        }
+    }
 }
